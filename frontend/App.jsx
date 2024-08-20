@@ -1,66 +1,88 @@
-import { useEffect, useReducer } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import NavBar from "./components/layouts/NavBar";
 import About from "./components/pages/About";
 import Services from "./components/pages/Services";
 import Footer from "./components/layouts/Footer";
-import Categories from "./components/pages/Categories";
-import Home from "./components/pages/Home";
+import Store from "./components/pages/Store";
 import Contacts from "./components/pages/Contacts";
+import Home from "./components/pages/Home";
+import BookConsultation from "./components/pages/BookConsultation";
 import RegisterForm from "./components/auth/RegisterForm";
+import ActivationPage from "./components/auth/ActivationPage";
+import ResendActivation from "./components/auth/ResendActivation";
+import ResetPassword from "./components/auth/ResetPassword";
 import LoginForm from "./components/auth/LoginForm";
-import Items from "./components/pages/Items";
-import Orders from "./components/pages/Orders";
-import PlaceOrders from "./components/pages/PlaceOrders";
+import Profile from "./components/auth/Profile";
+import PlaceOrder from "./components/orders/PlaceOrder";
+import Items from "./components/orders/Orders";
+import Orders from "./components/orders/Orders";
+import Cart from "./components/orders/carts/Cart";
+import ItemDetail from "./components/items/ItemDetail";
 
-// const initialState = {
-
-// };
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case "dataRecieved":
-//       return { ...state, status: "ready" };
-//     case "dataFailed":
-//       return { ...state, status: "error" };
-//     case "start":
-//       return {
-//      }
-//     default:
-//       throw new Error("Action is unknown");
-//   }
+import { SearchProvider } from "./components/contexts/SearchContext";
+import SearchResults from "./components/contexts/SearchResults";
+import CartContextProvider from "./components/contexts/CartContextProvider";
 
 const App = () => {
   const baseURL = "http://localhost:8000";
 
-  // const [
-  //   { },
-  //   dispatch,
-  // ] = useReducer(reducer, initialState);
-  // useEffect(function () {
-  //   fetch("http://localhost:9000/items")
-  //     .then((res) => res.json())
-  //     .then((data) => dispatch({ type: "dataRecieved", payload: data }))
-  //     .catch((err) => dispatch({ type: "dataFailed" }));
-  // }, []);
-
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/contact" element={<Contacts />} />
-        <Route path="/register" element={<RegisterForm baseURL={baseURL} />} />
-        <Route path="/login" element={<LoginForm baseURL={baseURL} />} />
-        <Route path="/items" element={<Items />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/place-order" element={<PlaceOrders />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <CartContextProvider>
+      <SearchProvider>
+        <BrowserRouter>
+          <NavBar />
+          <Routes>
+            <Route
+              path="/search"
+              element={<SearchResults baseURL={baseURL} />}
+            />
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/contact" element={<Contacts />} />
+            <Route path="/bookConsultation" element={<BookConsultation />} />
+            <Route
+              path="/register"
+              element={<RegisterForm baseURL={baseURL} />}
+            />
+            <Route
+              path="/auth/activate/:uid/:token"
+              element={<ActivationPage baseURL={baseURL} />}
+            />
+            <Route path="/login" element={<LoginForm baseURL={baseURL} />} />
+            <Route
+              path="/auth/resend_activation"
+              element={<ResendActivation baseURL={baseURL} />}
+            />
+            <Route
+              path="/auth/reset_password"
+              element={<ResetPassword baseURL={baseURL} />}
+            />
+            <Route
+              path="/auth/profile"
+              element={<Profile baseURL={baseURL} />}
+            />
+            <Route
+              path="/orders/place_order"
+              element={<PlaceOrder baseURL={baseURL} />}
+            />
+            <Route
+              path="/orders/orders"
+              element={<Orders baseURL={baseURL} />}
+            />
+            <Route path="/orders/cart" element={<Cart baseURL={baseURL} />} />
+            <Route path="/items" element={<Items baseURL={baseURL} />} />
+            <Route
+              path="/item_detail/:id"
+              element={<ItemDetail baseURL={baseURL} />}
+            />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </SearchProvider>
+    </CartContextProvider>
   );
 };
 
